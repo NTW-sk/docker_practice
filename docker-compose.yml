@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  webserver:
+    container_name: web-container
+    image: nginx:latest
+    ports:
+      - "9000:80"
+    volumes:
+      - ./webserver/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - appserver
+    networks:
+      - mynetwork 
+
+  appserver:
+    container_name: app-container
+    build: ./appserver
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./appserver:/app
+    environment:
+      - FLASK_APP=app.py
+    networks:
+      - mynetwork
+      
+networks:
+  mynetwork:
